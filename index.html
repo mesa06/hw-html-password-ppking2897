@@ -1,40 +1,201 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Password Generator</title>
 <script src="js/jquery.js"></script>
 <script src="js/seedrandom.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet"/>
 <style>
 #randomTable {
     font-family: monospace;
     font-size: 2.0em;
 }
+#btnStart{
+	width : 100%;
+	padding : 1%;
+	font-size :150%;
+	transition: all 2s ease-out;
+	border-width :5px;
+}
+#btnArea{
+	margin : 15% 30% 0 30% ;
+	transition: all 2s ease-out;
+}
+#pArea{
+	display : none;
+	font-size : 2em;
+	width : 100%;
+	padding : 1% 20% 0%;
+}
+#btnGo{
+	font-size :2em;
+	width : 100%;
+	margin :10px 0px 0 0;
+
+	transition: all 2s ease-out;
+}
+#txtSeed{
+	width : 100%;
+}
+
+#resultPassword{
+	width : 20%;
+	display : none;
+	font-size :1em;
+	margin : 1% 40%;
+	
+}
+
+#btnNumber{
+	width :32%;
+}
+
+#btnWordNumber1{
+	width :32%;
+}
+
+#btnWordNumber2{
+	width :34.5%;
+}
+
+#panelTitle{
+	font-size : 2em;
+}
+#descriptionArea{
+	　width :100%;
+}
+#description{
+	 Width : 20%;
+	 margin : 1% 30%;
+	 padding : 0 40% 0 0;
+	 font-size : 2em;
+	 white-space: nowrap; 
+}
+
 </style>
 </head>
 <body>
+	<div id="btnArea">
+		<h1 id="h1">
+			<input type="button" id="btnStart" class="btn btn-warning" value="按下按鈕開始產生密碼" />
+		</h1>
+	</div>
+	
+	<div id="descriptionArea" >
+		<div id="description" class="alert alert-success" role="alert">
+			<b>1.</b>這是一個密碼產生器，為了方便記密碼容易忘記的人，以及<br>&nbsp&nbsp&nbsp想不到要什麼樣的密碼的人使用。
+		</div>
+		<div id="description" class="alert alert-info" role="alert">
+			<b>2.</b>請按下上方按鈕後，請在出現keyin letter or word的地方，輸<br>&nbsp&nbsp&nbsp入你所想的數字。
+		</div>
+		<div id="description" class="alert alert-danger" role="alert">
+			<b>3.</b>可以選擇純數字或者字母跟數字參雜的密碼產生結果，按下<br>&nbsp&nbsp&nbsp產生亂數表，會出現十組密碼供你選擇。
+		</div>
+		<div id="description" class="alert alert-warning" role="alert">
+			<b>4.</b>密碼產生的結果是由你輸入的數字所亂數產生出來，因此<br>&nbsp&nbsp&nbsp建議輸入簡單方便記憶的數字，
+			以便之後即使忘記還是可<br>&nbsp&nbsp&nbsp以查詢。
+		</div>
+	</div>
+	
+	<div id="pArea">
+		<!--請輸入亂數表的編號：<input type="text" id="txtSeed" value="1234" />-->
+		<!--&nbsp;<input type="button" id="btnGo" class="btn btn-primary" value="產生亂數表" />-->
+		<div class="jumbotron" id="SSS">
+		  <h1>請輸入亂數表的編號：<input type="text" id="txtSeed" PlaceHolder="Keyin a letter or number" style="text-align:center"/></h1>
+		  <p2>
+		  <input type="button" id="btnNumber" class="btn btn-danger" name="buttonColor" value="數字" />
+		  <input type="button" id="btnWordNumber1" class="btn btn-primary" name="buttonColor" value="小寫字母+數字"/>
+		  <input type="button" id="btnWordNumber2" class="btn btn-primary" name="buttonColor" value="大小寫字母+數字"/>
+		  </p2>
+		  <p>
+		  <input type="button" id="btnGo" class="btn btn-warning" value="產生亂數表" />
+		  </p>
+		</div>
+	</div>
+	
+	
+	
+	
+<!--<div id="randomTable" class="panel panel-success">-->
 
-請輸入亂數表的編號：<input type="text" id="txtSeed" value="1234" />
-&nbsp;<input type="button" id="btnGo" value="產生亂數表" />
 
-<div id="randomTable">
+<!--</div>-->
+
+<div id="resultPassword" class="panel panel-primary">
+      <div class="panel-heading">
+          <h3 id="panelTitle" class="panel-title" style="text-align:center"><產生結果></h3>
+      </div>
+      <div  id="randomTable" class="panel-body" style="text-align:center">Panel content. </div>
 </div>
 
 <script>
 
+$("input[name='buttonColor']").css("font-size","1.5em");
+
+$("#btnStart").click(function () {
+	$("#btnStart").val("請在下列輸入數字或者字母");
+	$("#btnStart").prop("class","btn btn-primary");
+	$("#btnStart").css("padding","10px");
+	$("#btnArea").css("margin","0");
+	$("#pArea").show(1500);
+	$("#resultPassword").hide(1500);
+	$("#descriptionArea").hide(1500);
+	
+})
+
+//-----------選擇數字字母按鍵顏色功能切換-------------------------------
+
+var numberFlag=1 ;
+var numberWord1Flag=0	;
+var numberWord2Flag=0	;
+
+$("#btnNumber").click(function() {
+	$("input[name='buttonColor']").prop("class","btn btn-primary");
+	$("#btnNumber").prop("class","btn btn-danger");
+	numberFlag=1;
+	numberWord1Flag=0;
+	numberWord2Flag=0;
+})
+
+$("#btnWordNumber1").click(function() {
+	$("input[name='buttonColor']").prop("class","btn btn-primary");
+	$("#btnWordNumber1").prop("class","btn btn-danger");
+	numberFlag=0;
+	numberWord1Flag=1;
+	numberWord2Flag=0;
+})
+
+$("#btnWordNumber2").click(function() {
+	$("input[name='buttonColor']").prop("class","btn btn-primary");
+	$("#btnWordNumber2").prop("class","btn btn-danger");
+	numberFlag=0;
+	numberWord1Flag=0;
+	numberWord2Flag=1;
+})
+//------------------------------------------------------------------
+
+
 $("#btnGo").click(function () {
     var result = "";
 	// 純數字:
-	var sPool = "0123456789";
-    // 數字+小寫字母: (去除 l, o)
-    // var sPool = "abcdefghijkmnpqrstuvwxyz0123456789";
-    // 數字+大小寫字母: (去除 I, O, l, o)
-    // var sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+	if(numberFlag){
+		var sPool = "0123456789";	
+	}
+	else if(numberWord1Flag){
+		var sPool = "abcdefghijkmnpqrstuvwxyz0123456789";
+	}
+	else if(numberWord2Flag){
+		var sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+	}
 
     Math.seedrandom($("#txtSeed").val()); // 設定亂數種子
 	var iRandom = 0; var ch = "?";
 	for (iRow = 1; iRow <= 10; iRow++) {
-		var sLine = (iRow + 100).toString().substr(1, 2) + ": ";
+		var sLine = (iRow + 100).toString().substr(1, 2) + ": " ;
+		//顯示前面的0X:字串  　+100是為了顯示0X目的
 		for (iCol = 1; iCol <= 10; iCol++) {
 			iRandom = Math.floor(Math.random() * sPool.length);
 			ch = sPool.substr(iRandom, 1);
@@ -43,7 +204,16 @@ $("#btnGo").click(function () {
 		result += sLine + "<br>";
 	}
 	$("#randomTable").html(result);
+	
+	//$("#btnGo").val("結果已產生");
+	//$("#btnGo").prop("class","btn btn-success");
+	
+	$("#btnStart").prop("class","btn btn-success");
+	$("#btnStart").val("想要產生其他密碼\"請點我\"")
+	$("#resultPassword").show(1500);
+	$("#pArea").hide(1500);
 });
+
 
 </script>
 
